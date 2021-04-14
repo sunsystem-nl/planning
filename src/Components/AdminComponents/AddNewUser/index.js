@@ -1,10 +1,10 @@
-import axios                         from 'axios'
-import { Messages }                  from 'primereact/messages'
+import axios from 'axios'
+import { Messages } from 'primereact/messages'
 import React, { useContext, useRef } from 'react'
-import { AuthContext }               from '../../../Context/AuthContext'
-import { PageTitle }                 from '../PageTitle'
-import { AddNewUserForm }            from '../UserForm'
-import { validator }                 from '../UserForm/validator'
+import { AuthContext } from '../../../Context/AuthContext'
+import { PageTitle } from '../PageTitle'
+import { AddNewUserForm } from '../UserForm'
+import { validator } from '../UserForm/validator'
 
 /**
  * @description component to create a new user
@@ -15,21 +15,21 @@ export const AddNewUser = () => {
 	/**
 	 * @description get the bearer token
 	 */
-	const { token } = useContext( AuthContext )
+	const { token } = useContext(AuthContext)
 
 	/**
 	 * @description The message that is displayed in case of an error or
 	 *     successful operation
 	 * @type {React.MutableRefObject<null>}
 	 */
-	const message = useRef( null )
+	const message = useRef(null)
 
 	/**
 	 * @description add a new user to the database
 	 * @param evt
 	 * @returns {Promise<*>}
 	 */
-	const handleNewUserSubmit = async( evt ) => {
+	const handleNewUserSubmit = async (evt) => {
 		/**
 		 * @description destructure the event
 		 */
@@ -39,36 +39,36 @@ export const AddNewUser = () => {
 		 * @description validate if fields have the correct values
 		 * @file ../UserForm/validator.js
 		 */
-		const errors = validator( email, wachtwoord, klantnummer, contactpersoon, naamKort, naamLang )
+		const errors = validator(email, wachtwoord, klantnummer, contactpersoon, naamKort, naamLang)
 
 		/**
 		 * @description if the errors array is not empty show the user the
 		 *     error messages
 		 */
-		if( errors.length > 1 ) return message.current.show( errors )
+		if (errors) return message.current.show(errors)
 
 		/**
 		 * @description create the post body
 		 * @type {string}
 		 * @TODO: update the api to check only for required fields
 		 */
-		const body = JSON.stringify( {
-			                             'contactpersoon': contactpersoon,
-			                             'email': email,
-			                             'huisnummer': huisnummer || '',
-			                             'klantnummer': klantnummer || '',
-			                             'land': land || '',
-			                             'leverdag': leverdag || '',
-			                             'naamKort': naamKort,
-			                             'naamLang': naamLang,
-			                             'plaats': plaats || '',
-			                             'postcode': postcode || '',
-			                             'role': role || 'klant',
-			                             'straatnaam': straatnaam || '',
-			                             'telefoonMobiel': telefoonMobiel || '',
-			                             'telefoonVast': telefoonVast || '',
-			                             'password': wachtwoord,
-		                             } )
+		const body = JSON.stringify({
+			'contactpersoon': contactpersoon,
+			'email': email,
+			'huisnummer': huisnummer || '',
+			'klantnummer': klantnummer || '',
+			'land': land || '',
+			'leverdag': leverdag || '',
+			'naamKort': naamKort,
+			'naamLang': naamLang,
+			'plaats': plaats || '',
+			'postcode': postcode || '',
+			'role': role || 'klant',
+			'straatnaam': straatnaam || '',
+			'telefoonMobiel': telefoonMobiel || '',
+			'telefoonVast': telefoonVast || '',
+			'password': wachtwoord,
+		})
 
 		try {
 			/**
@@ -76,57 +76,57 @@ export const AddNewUser = () => {
 			 *     to the database
 			 * @type {AxiosResponse<any>}
 			 */
-			const result = await axios.post( `${ process.env.REACT_APP_API_URL }/users`, body, {
+			const result = await axios.post(`${process.env.REACT_APP_API_URL}/users`, body, {
 				headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-					'authorization': `Bearer ${ token }`,
+					'authorization': `Bearer ${token}`,
 				},
-			} )
+			})
 
 			/**
 			 * @description if the response is OK show message to user
 			 * @TODO: create a global success component
 			 */
-			if( result.status === 200 ) {
-				message.current.show( [
-					                      {
-						                      severity: 'success',
-						                      detail: 'De gebruiker is succesvol toegevoegd aan de database.',
-					                      },
-				                      ] )
+			if (result.status === 200) {
+				message.current.show([
+					{
+						severity: 'success',
+						detail: 'De gebruiker is succesvol toegevoegd aan de database.',
+					},
+				])
 				//@TODO: empty form after submit
 			}
-		} catch( err ) {
+		} catch (err) {
 			/**
 			 * @description if there is any error show user a message
 			 * @TODO: create a global error component
 			 */
-			message.current.show( [
-				                      {
-					                      severity: 'error',
-					                      detail: 'Er is iets fout gegaan met een gebruiker toevoegen, probeer nogmaals.',
-				                      },
-			                      ] )
+			message.current.show([
+				{
+					severity: 'error',
+					detail: 'Er is iets fout gegaan met een gebruiker toevoegen, probeer nogmaals.',
+				},
+			])
 		}
 
 	}
 
 	return (
 		<div
-			className={ 'd-flex flex-column p-5' }
-			style={ { minHeight: 'calc(100vh - 59px)', height: '100%' } }
+			className={'d-flex flex-column p-5'}
+			style={{ minHeight: 'calc(100vh - 59px)', height: '100%' }}
 		>
 			<div
-				style={ {
+				style={{
 					maxWidth: '900px',
 					margin: '0',
 					width: '100%',
-				} }
+				}}
 			>
-				<PageTitle title={ 'Voeg een nieuwe gebruiker toe.' } />
-				<Messages ref={ message } id={ 'message' } />
-				<AddNewUserForm handleSubmitForm={ handleNewUserSubmit } />
+				<PageTitle title={'Voeg een nieuwe gebruiker toe.'} />
+				<Messages ref={message} id={'message'} />
+				<AddNewUserForm handleSubmitForm={handleNewUserSubmit} />
 			</div>
 		</div>
 	)

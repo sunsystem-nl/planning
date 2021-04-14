@@ -11,7 +11,7 @@ git clone https://github.com/sunsystem-nl/planning.git projectname
 cd projectname
 ```
 
-next install the dependencies for the cliet
+next install the dependencies for the client
 ```
 npm i
 ```
@@ -35,6 +35,10 @@ cd functions
 
 npm i
 ```
+
+## Add Service Account
+
+get the serviceAccount.json from the firebase console and add the file to the functions folder, this is needed to confirm your credentials when using/accessing firebase cloud storage and firebase functions.
 
 ## Run the api emulator
 

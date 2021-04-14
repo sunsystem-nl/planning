@@ -1,6 +1,6 @@
-import React           from 'react'
-import ReactDOM        from 'react-dom'
-import { App }         from './Components/App/App'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { App } from './Components/App/App'
 import reportWebVitals from './reportWebVitals'
 
 // STYLES IMPORT
@@ -8,6 +8,7 @@ import 'primereact/resources/themes/saga-blue/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'quill/dist/quill.bubble.css'
 
 import PrimeReact from 'primereact/api'
 
@@ -17,7 +18,7 @@ ReactDOM.render(
 	<React.StrictMode>
 		<App />
 	</React.StrictMode>,
-	document.getElementById( 'root' ),
+	document.getElementById('root'),
 )
 
 // If you want to start measuring performance in your app, pass a function
