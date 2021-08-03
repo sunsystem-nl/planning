@@ -1,82 +1,82 @@
 import React, { createContext, useEffect, useRef, useState } from 'react'
-import { auth }                                              from '../Helpers/firebase'
+import { auth } from '../Helpers/firebase'
 import firebase
-                                                             from 'firebase/app'
+	from 'firebase/app'
 
 export const AuthContext = createContext()
 
-export const AuthProvider = ( { children } ) => {
-	const [ currentUser, setCurrentUser ] = useState( null )
-	const [ token, setToken ] = useState( null )
-	const [ role, setRole ] = useState( {} )
-	const [ count, setCount ] = useState( 0 )
+export const AuthProvider = ({ children }) => {
+	const [currentUser, setCurrentUser] = useState(null)
+	const [token, setToken] = useState(null)
+	const [role, setRole] = useState({})
+	const [count, setCount] = useState(0)
 	const savedCallback = useRef()
 
 	function callback() {
-		setCount( count + 1 )
+		setCount(count + 1)
 	}
 
-	useEffect( () => {
+	useEffect(() => {
 		savedCallback.current = callback
-	} )
+	})
 
-	useEffect( () => {
+	useEffect(() => {
 		function tick() {
 			savedCallback.current()
 		}
 
-		let id = setInterval( tick, 1000 * 60 * 29 )
-		return () => clearInterval( id )
-	}, [] )
+		let id = setInterval(tick, 1000 * 60 * Math.floor(Math.random() * (49 - 59 + 1) + 49))
+		return () => clearInterval(id)
+	}, [])
 
 	// log the user in with email and password
-	const login = ( email, password ) => {
-		firebase.auth().setPersistence( firebase.auth.Auth.Persistence.LOCAL ).then( () => {
-			return auth.signInWithEmailAndPassword( email, password )
-		} ).catch( err => console.error( err ) )
+	const login = (email, password) => {
+		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+			return auth.signInWithEmailAndPassword(email, password)
+		}).catch(err => console.error(err))
 	}
 
 	// log the user out from the application
 	// set all states to their original state
 	const logout = () => {
-		setCurrentUser( null )
-		setToken( null )
-		setRole( {} )
+		setCurrentUser(null)
+		setToken(null)
+		setRole({})
 		return auth.signOut()
 	}
 
-	useEffect( () => {
-		const listener = auth.onAuthStateChanged( user => {
+	useEffect(() => {
+		const listener = auth.onAuthStateChanged(user => {
 			// set the current user
-			setCurrentUser( user )
+			setCurrentUser(user)
 
-			if( !currentUser ) return
+			if (!currentUser) return
 
 			// get the id token of that user which needs to be send to the
 			// server on every request
-			auth.currentUser.getIdToken( /* forceRefresh */ true ).then( idToken => {
-				setToken( idToken )
-			} ).catch( err => console.error( err ) )
+			auth.currentUser.getIdToken( /* forceRefresh */ true).then(idToken => {
+				setToken(idToken)
+			}).catch(err => console.error(err))
 
 			// see what claims the token holds this is used to change ui views
 			// based on claims
-			auth.currentUser.getIdTokenResult().then( idTokenResult => {
-				if( idTokenResult.claims.role === 'admin' ) {
-					setRole( { admin: true } )
+			auth.currentUser.getIdTokenResult().then(idTokenResult => {
+				switch (idTokenResult.claims.role) {
+					case 'admin':
+						setRole({ admin: true })
+						break;
+					case 'werknemer':
+						setRole({ werknemer: true })
+						break;
+					default:
+						setRole({ klant: true })
+						break;
 				}
+			})
 
-				if( idTokenResult.claims.role === 'werknemer' ) {
-					setRole( { werknemer: true } )
-				}
-
-				if( idTokenResult.claims.role === 'klant' ) {
-					setRole( { klant: true } )
-				}
-			} )
-
-		} )
+		})
 		return listener
-	}, [ currentUser, count ] )
+	}, [currentUser, count])
 
 	// create an object for the auth context provider
 	const value = {
@@ -89,8 +89,8 @@ export const AuthProvider = ( { children } ) => {
 
 	// return the auth context wrapper
 	return (
-		<AuthContext.Provider value={ value }>
-			{ children }
+		<AuthContext.Provider value={value}>
+			{children}
 		</AuthContext.Provider>
 	)
 }

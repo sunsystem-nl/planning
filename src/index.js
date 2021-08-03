@@ -10,9 +10,21 @@ import 'primeicons/primeicons.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'quill/dist/quill.bubble.css'
 
-import PrimeReact from 'primereact/api'
+import PrimeReact, { locale, addLocale } from 'primereact/api'
 
 PrimeReact.ripple = true
+
+addLocale('nl', {
+	firstDayOfWeek: 1,
+	dayNames: ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'],
+	dayNamesShort: ['Zon', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'],
+	dayNamesMin: ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'],
+	monthNames: ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'],
+	monthNamesShort: ['Jan', 'Feb', 'Maart', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
+	today: 'Vandaag',
+})
+
+locale('nl')
 
 ReactDOM.render(
 	<React.StrictMode>

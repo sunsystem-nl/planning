@@ -1,24 +1,24 @@
-import {Request, Response} from "express";
+import { Request, Response } from "express";
 import * as admin from 'firebase-admin'
 
 export async function isAuthenticated(req: Request, res: Response, next: Function) {
-    const {authorization} = req.headers
+    const { authorization } = req.headers
 
     if (!authorization)
-        return res.status(401).send({message: 'Unauthorized'});
+        return res.status(401).send({ message: 'Unauthorized authorized' });
 
     if (!authorization.startsWith('Bearer'))
-        return res.status(401).send({message: 'Unauthorized'});
+        return res.status(401).send({ message: 'Unauthorized, doesn\'t start with bearer' });
 
     const split = authorization.split('Bearer ')
     if (split.length !== 2)
-        return res.status(401).send({message: 'Unauthorized'});
+        return res.status(401).send({ message: 'Unauthorized split' });
 
     const token = split[1]
 
     try {
         const decodedToken: admin.auth.DecodedIdToken = await admin.auth().verifyIdToken(token);
-        console.log("decodedToken", JSON.stringify(decodedToken))
+
         res.locals = {
             ...res.locals,
             uid: decodedToken.uid,
@@ -28,6 +28,6 @@ export async function isAuthenticated(req: Request, res: Response, next: Functio
         return next();
     } catch (err) {
         console.error(`${err.code} -  ${err.message}`)
-        return res.status(401).send({message: 'Unauthorized'});
+        return res.status(401).send({ message: 'Unauthorized main error', code: err.code, errormessage: err.message });
     }
 }

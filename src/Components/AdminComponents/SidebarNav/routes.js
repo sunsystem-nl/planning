@@ -16,17 +16,29 @@ export const routes = [
 				title: 'Alles',
 			},
 			{
-				slug: '/admin-dashboard/planning/klaar',
-				title: 'Klaar',
+				slug: '/admin-dashboard/planning/pantsers',
+				title: 'Pantsers',
 			},
 			{
-				slug: '/admin-dashboard/planning/week',
+				slug: '/admin-dashboard/planning/werkbank',
+				title: 'Werkbank',
+			},
+			{
+				slug: '/admin-dashboard/planning/bediening',
+				title: 'Bediening',
+			},
+			{
+				slug: '/admin-dashboard/planning/klaar-niet-afgehaald',
+				title: 'Klaar niet afgehaald',
+			},
+			{
+				slug: '/admin-dashboard/planning/klaar-en-afgehaald',
+				title: 'Klaar en afgehaald',
+			},
+			{
+				slug: '/admin-dashboard/planning/deze-week',
 				title: 'Deze Week',
-			},
-			{
-				slug: '/admin-dashboard/planning/maand',
-				title: 'Deze Maand',
-			},
+			}
 		],
 	},
 	{
@@ -39,11 +51,7 @@ export const routes = [
 			{
 				slug: '/admin-dashboard/opdrachten/new',
 				title: 'Nieuwe Opdracht',
-			},
-			{
-				slug: '/admin-dashboard/opdrachten/edit',
-				title: 'Bewerk Opdracht',
-			},
+			}
 		],
 	},
 	{

@@ -1,4 +1,4 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 import * as admin from 'firebase-admin';
 
 const mapProducts = (productsRef: admin.firestore.DocumentData | undefined) => {
@@ -11,6 +11,11 @@ const mapProducts = (productsRef: admin.firestore.DocumentData | undefined) => {
 
 // create new product
 export const create = async (req: Request, res: Response) => {
+
+	const capitalize = (str: string) =>  {
+		return str[0].toUpperCase() + str.slice(1).toLowerCase();
+	  }
+
 	try {
 		// destructure request body
 		const {
@@ -19,7 +24,7 @@ export const create = async (req: Request, res: Response) => {
 		} = req.body;
 
 		if (!productNaamSingular || !productNaamPlural || productNaamSingular === '' || productNaamPlural === '') {
-			return res.status(400).send({message: 'Niet alle velden zijn ingevuld.'});
+			return res.status(400).send({ message: 'Niet alle velden zijn ingevuld.' });
 		}
 
 		const product = {
@@ -27,7 +32,7 @@ export const create = async (req: Request, res: Response) => {
 			productNaamPlural
 		};
 
-		const docID = productNaamSingular;
+		const docID = capitalize(product.productNaamSingular);
 
 		await admin.firestore().collection('/products').doc(docID).create(product);
 		return res.status(200).send({
@@ -50,7 +55,7 @@ export const all = async (req: Request, res: Response) => {
 		let products = [];
 
 		if (snapshot.empty) {
-			return res.status(400).send({message: 'Geen producten gevonden.'});
+			return res.status(400).send({ message: 'Geen producten gevonden.' });
 		}
 
 		snapshot.forEach(doc => {
@@ -63,7 +68,7 @@ export const all = async (req: Request, res: Response) => {
 		});
 
 		// @ts-ignore
-		return res.status(200).send({products});
+		return res.status(200).send({ products });
 	} catch (err) {
 		// something went wrong check the firebase-debug.log
 		return handleErrors(res, err);
@@ -73,7 +78,7 @@ export const all = async (req: Request, res: Response) => {
 // get specific product
 export const get = async (req: Request, res: Response) => {
 	try {
-		const {id} = req.params;
+		const { id } = req.params;
 
 		const productRef = await admin.firestore().collection('/products').doc(id).get();
 		const doc = productRef.data();
@@ -88,16 +93,16 @@ export const get = async (req: Request, res: Response) => {
 // update specific product
 export const update = async (req: Request, res: Response) => {
 	try {
-		const {id} = req.params;
+		const { id } = req.params;
 
 		if (!id) {
-			return res.status(400).send({message: 'Product niet gevonden.'});
+			return res.status(400).send({ message: 'Product niet gevonden.' });
 		}
 
-		const {productNaamSingular, productNaamPlural} = req.body;
+		const { productNaamSingular, productNaamPlural } = req.body;
 
 		if (!productNaamSingular || !productNaamPlural || productNaamSingular === '' || productNaamPlural === '') {
-			return res.status(400).send({message: 'Niet alle velden zijn ingevuld.'});
+			return res.status(400).send({ message: 'Niet alle velden zijn ingevuld.' });
 		}
 
 		const product = {
@@ -121,7 +126,7 @@ export const update = async (req: Request, res: Response) => {
 // delete a product
 export const remove = async (req: Request, res: Response) => {
 	try {
-		const {id} = req.params;
+		const { id } = req.params;
 
 		const productRef = await admin.firestore().collection('/products').doc(id).get();
 		const product = await productRef.data();
@@ -140,5 +145,5 @@ export const remove = async (req: Request, res: Response) => {
 
 // handle errors when something goes wrong
 const handleErrors = (res: Response, err: any) => {
-	return res.status(500).send({message: `${err.code} - ${err.message}`});
+	return res.status(500).send({ message: `${err.code} - ${err.message}` });
 };

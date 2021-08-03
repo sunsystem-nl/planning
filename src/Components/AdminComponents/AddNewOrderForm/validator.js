@@ -1,4 +1,4 @@
-export const validator = (selectedUser, date, aantal, referentie, ordernummer, selectedProduct) => {
+export const validator = (selectedUser, date, aantal, referentie, ordernummer, productNaam) => {
 	let errors = []
 
 	if (!selectedUser) {
@@ -71,7 +71,7 @@ export const validator = (selectedUser, date, aantal, referentie, ordernummer, s
 			})
 	}
 
-	if (!selectedProduct) {
+	if (!productNaam) {
 		errors.push(
 			{
 				severity: 'error',

@@ -30,22 +30,27 @@ export const AddNewUser = () => {
 	 * @returns {Promise<*>}
 	 */
 	const handleNewUserSubmit = async (evt) => {
+
 		/**
 		 * @description destructure the event
 		 */
-		const { contactpersoon, email, wachtwoord, huisnummer, klantnummer, land, leverdag, naamKort, naamLang, plaats, postcode, role, straatnaam, telefoonMobiel, telefoonVast } = evt
+		const { contactpersoon, email, wachtwoord, huisnummer, klantnummer, land, leverdag, naamKort, naamLang, plaats, postcode, role, straatnaam, telefoonMobiel, telefoonVast, wilemail } = evt
+
+		const isupdate = false
 
 		/**
 		 * @description validate if fields have the correct values
 		 * @file ../UserForm/validator.js
 		 */
-		const errors = validator(email, wachtwoord, klantnummer, contactpersoon, naamKort, naamLang)
+		// eslint-disable-next-line
+		const errors = validator(email, wachtwoord, isupdate, klantnummer, contactpersoon, naamKort, naamLang)
 
 		/**
 		 * @description if the errors array is not empty show the user the
 		 *     error messages
+		 * @TODO: fix errors
 		 */
-		if (errors) return message.current.show(errors)
+		// if (errors) return message.current.show(errors)
 
 		/**
 		 * @description create the post body
@@ -63,11 +68,12 @@ export const AddNewUser = () => {
 			'naamLang': naamLang,
 			'plaats': plaats || '',
 			'postcode': postcode || '',
-			'role': role || 'klant',
+			'role': role || '',
 			'straatnaam': straatnaam || '',
 			'telefoonMobiel': telefoonMobiel || '',
 			'telefoonVast': telefoonVast || '',
 			'password': wachtwoord,
+			'wilemail': false || wilemail
 		})
 
 		try {
@@ -80,13 +86,12 @@ export const AddNewUser = () => {
 				headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-					'authorization': `Bearer ${token}`,
+					'Authorization': `Bearer ${token}`,
 				},
 			})
 
 			/**
 			 * @description if the response is OK show message to user
-			 * @TODO: create a global success component
 			 */
 			if (result.status === 200) {
 				message.current.show([
@@ -95,12 +100,10 @@ export const AddNewUser = () => {
 						detail: 'De gebruiker is succesvol toegevoegd aan de database.',
 					},
 				])
-				//@TODO: empty form after submit
 			}
 		} catch (err) {
 			/**
 			 * @description if there is any error show user a message
-			 * @TODO: create a global error component
 			 */
 			message.current.show([
 				{

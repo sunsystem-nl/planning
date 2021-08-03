@@ -1,0 +1,78 @@
+#wrapper {
+    overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: -15rem;
+    -webkit-transition: margin .25s ease-out;
+    -moz-transition: margin .25s ease-out;
+    -o-transition: margin .25s ease-out;
+    transition: margin .25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+}
+
+
+#sidebar-wrapper .list-group {
+    width: 15rem;
+}
+
+#page-content-wrapper {
+    min-width: 100vw;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+}
+
+@media (min-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    #page-content-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -15rem;
+    }
+}
+
+#message {
+    position: absolute;
+    top: 60px;
+    right: 80px;
+    z-index: 9999;
+}
+
+.p-button {
+    border: none;
+}
+
+.p-calendar-w-btn .p-datepicker-trigger {
+    background: #ffc008;
+    border: 0;
+}
+
+.p-calendar-w-btn .p-datepicker-trigger:enabled:hover {
+    color: #212529;
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.p-datepicker table td.p-datepicker-today > span.p-highlight,
+.p-datepicker:not(.p-disabled) table td span:not(.p-highlight):not(.p-disabled):hover,
+.p-datepicker .p-datepicker-header .p-datepicker-prev:enabled:hover, .p-datepicker .p-datepicker-header .p-datepicker-next:enabled:hover {
+    background: #ffefba !important;
+}
+
+.pi {
+    color: #222629;
+}

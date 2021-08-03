@@ -81,7 +81,7 @@ export const GetAllVacations = ( deleted ) => {
 				headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-					'authorization': `Bearer ${ token }`,
+					'Authorization': `Bearer ${ token }`,
 				},
 
 			} )
@@ -107,7 +107,7 @@ export const GetAllVacations = ( deleted ) => {
 				headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-					'authorization': `Bearer ${ token }`,
+					'Authorization': `Bearer ${ token }`,
 				},
 
 			} )
@@ -140,7 +140,7 @@ export const GetAllVacations = ( deleted ) => {
 				headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-					'authorization': `Bearer ${ token }`,
+					'Authorization': `Bearer ${ token }`,
 				},
 
 			} )

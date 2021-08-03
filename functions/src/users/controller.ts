@@ -34,7 +34,7 @@ export async function create(req: Request, res: Response) {
 	try {
 		// destructure request body
 		const {
-			password, email, role, klantnummer, naamKort, naamLang, contactpersoon, straatnaam, huisnummer, postcode, plaats, land, telefoonVast, telefoonMobiel, leverdag,
+			password, email, role, klantnummer, naamKort, naamLang, contactpersoon, straatnaam, huisnummer, postcode, plaats, land, telefoonVast, telefoonMobiel, leverdag, wilemail
 		} = req.body;
 
 		// check if password email and role are set
@@ -58,6 +58,7 @@ export async function create(req: Request, res: Response) {
 			telefoonVast,
 			telefoonMobiel,
 			leverdag,
+			wilemail
 		};
 
 		// check if all fields have a value
@@ -81,18 +82,20 @@ export async function create(req: Request, res: Response) {
 
 		// set a custom claim for the new user by default this will be the role klant
 		if (role === 'admin') {
-			await admin.auth().setCustomUserClaims(uid, {admin: true});
-		} else if (role === 'werknemer') {
-			await admin.auth().setCustomUserClaims(uid, {werknemer: true});
-		} else {
-			await admin.auth().setCustomUserClaims(uid, {klant: true});
+			await admin.auth().setCustomUserClaims(uid, {role: 'admin'});
+		} 
+		if (role === 'werknemer') {
+			await admin.auth().setCustomUserClaims(uid, {role: 'werknemer'});
+		} 
+		if (role === 'klant') {
+			await admin.auth().setCustomUserClaims(uid, {role: 'klant'});
 		}
 
 		// add the new user to the database
 		await admin.firestore().collection('/users').doc(uid).create(userObject);
 
 		// all went well send the client a success message
-		return res.status(200).send({message: 'De nieuwe gebruiker is succesvol toegevoegd aan de database.'});
+		return res.status(200).send({message: 'De nieuwe gebruiker is succesvol toegevoegd aan de database.', user: userObject});
 	} catch (err) {
 		// something went wrong check the firebase-debug.log
 		return handleError(res, err);
@@ -167,11 +170,11 @@ export async function update(req: Request, res: Response) {
 
 		// destructure the request body
 		const {
-			password, email, role, klantnummer, naamKort, naamLang, contactpersoon, straatnaam, huisnummer, postcode, plaats, land, telefoonVast, telefoonMobiel, leverdag,
+			email, role, klantnummer, naamKort, naamLang, contactpersoon, straatnaam, huisnummer, postcode, plaats, land, telefoonVast, telefoonMobiel, leverdag, wilemail
 		} = req.body;
 
 		// check if all fields have a value for authentication
-		if (!id || id === '' || !password || password === '' || !email || email === '' || !role || role === '') {
+		if (!id || id === '' || !email || email === '' || !role || role === '') {
 			return res.status(400).send({message: 'Niet alle velden zijn ingevuld.'});
 		}
 
@@ -191,6 +194,7 @@ export async function update(req: Request, res: Response) {
 			telefoonVast,
 			telefoonMobiel,
 			leverdag,
+			wilemail
 		};
 
 		// check if all fields have a value
@@ -208,7 +212,7 @@ export async function update(req: Request, res: Response) {
 		// all checks done now it's time to add the user to authentication and firestore
 
 		// update the users password and email
-		await admin.auth().updateUser(id, {password, email});
+		await admin.auth().updateUser(id, {email});
 
 		// update the users custom claims
 		await admin.auth().setCustomUserClaims(id, {role});

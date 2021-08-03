@@ -11,12 +11,15 @@ import { opmerkingField } from './opmerkingField'
 import { urgentField } from './urgentField'
 
 export const AddNewOrderForm = ({
+	isUpdate,
 	handleSubmitForm,
 	data,
 	users,
 	products,
 	setSelectedUser,
+	selectedUser,
 	setSelectedProduct,
+	selectedProduct,
 	setDate,
 	currentDate,
 	invalidDates,
@@ -28,7 +31,7 @@ export const AddNewOrderForm = ({
 	setUrgent
 }) => {
 	const { register, handleSubmit } = useForm({
-		defaultValues: data || '',
+		defaultValues: data === 'undefined' ? '' : data,
 	})
 
 	return (
@@ -36,9 +39,9 @@ export const AddNewOrderForm = ({
 			onSubmit={handleSubmit(handleSubmitForm)}
 			className={'mx-auto w-100'}
 		>
-			{klantSelectField(setSelectedUser, register, users)}
+			{klantSelectField(selectedUser, setSelectedUser, register, users)}
 
-			{dateSelectField(setDate, register, currentDate, invalidDates)}
+			{dateSelectField(isUpdate, setDate, register, currentDate, invalidDates)}
 
 			{orderNummer(register)}
 
@@ -46,7 +49,7 @@ export const AddNewOrderForm = ({
 
 			{productAantal(register, setAantal)}
 
-			{productSelectField(register, setSelectedProduct, products, aantal)}
+			{productSelectField(selectedProduct, register, setSelectedProduct, products, aantal)}
 
 			{opmerkingField(register, opmerking, setOpmerking)}
 

@@ -23,6 +23,7 @@ export const AddNewOrder = () => {
 	const [invalidDates, setInvalidDates] = useState(null)
 	const [aantal, setAantal] = useState(null)
 	const [products, setProducts] = useState(null)
+	// eslint-disable-next-line
 	const [selectedProduct, setSelectedProduct] = useState()
 	const [opmerking, setOpmerking] = useState(null)
 	const [urgent, setUrgent] = useState(false)
@@ -34,7 +35,7 @@ export const AddNewOrder = () => {
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
-				'authorization': `Bearer ${token}`,
+				'Authorization': `Bearer ${token}`,
 			},
 		})
 		if (allUsers) {
@@ -46,6 +47,7 @@ export const AddNewOrder = () => {
 	useEffect(() => {
 		const unsubscribeUsers = getAllUsers()
 		return unsubscribeUsers
+		// eslint-disable-next-line
 	}, [getAllUsers])
 
 	const getAllVacations = useCallback(async () => {
@@ -53,7 +55,7 @@ export const AddNewOrder = () => {
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
-				'authorization': `Bearer ${token}`,
+				'Authorization': `Bearer ${token}`,
 			},
 		})
 		let disabledDatesArray = []
@@ -65,11 +67,13 @@ export const AddNewOrder = () => {
 			)
 		}
 		setInvalidDates(disabledDatesArray)
+		// eslint-disable-next-line
 	}, [token, setInvalidDates])
 
 	useEffect(() => {
 		const unsubscribeVacations = getAllVacations()
 		return unsubscribeVacations
+		// eslint-disable-next-line
 	}, [getAllVacations])
 
 	const getAllProducts = useCallback(async () => {
@@ -77,7 +81,7 @@ export const AddNewOrder = () => {
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
-				'authorization': `Bearer ${token}`,
+				'Authorization': `Bearer ${token}`,
 			},
 		})
 
@@ -89,19 +93,35 @@ export const AddNewOrder = () => {
 			setSelectedProduct(allProducts.data.products[0].productNaamSingular)
 			setProducts(productArray)
 		}
+		// eslint-disable-next-line
 	}, [token, aantal])
 
 	useEffect(() => {
 		const unsubscribeProducts = getAllProducts()
 		return unsubscribeProducts
+		// eslint-disable-next-line
 	}, [getAllProducts])
+
+	// eslint-disable-next-line
+	const getSelectedUserInfo = useCallback(async (klantID) => {
+		const selectedUserInfo = await axios.get(`${process.env.REACT_APP_API_URL}/users/${klantID}`, {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${token}`,
+			},
+		})
+		return selectedUserInfo.data.user
+	})
 
 	const handleSubmit = async (evt) => {
 		let ordernummer = parseInt(evt.ordernummer)
 		let productAantal = parseInt(evt.productAantal)
 		let { klantID, productNaam, referentie } = evt
 
-		const errors = validator(selectedUser, date, aantal, referentie, ordernummer, selectedProduct)
+		const userInfo = await getSelectedUserInfo(klantID)
+
+		const errors = validator(selectedUser, date, aantal, referentie, ordernummer, productNaam)
 		/**
 		 * @description if the errors array is not empty show the user the
 		 *     error messages
@@ -110,6 +130,8 @@ export const AddNewOrder = () => {
 
 		const body = JSON.stringify({
 			klantID,
+			klantLeverDag: userInfo.leverdag,
+			klantEmail: userInfo.email,
 			productID: productNaam,
 			date,
 			ordernummer,
@@ -129,7 +151,7 @@ export const AddNewOrder = () => {
 				headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-					'authorization': `Bearer ${token}`,
+					'Authorization': `Bearer ${token}`,
 				},
 			})
 
@@ -145,12 +167,21 @@ export const AddNewOrder = () => {
 			/**
 			 * @description if there is any error show user a message
 			 */
-			message.current.show([
-				{
-					severity: 'error',
-					detail: 'Er is iets fout gegaan met een gebruiker toevoegen, probeer nogmaals.',
-				},
-			])
+			if (err.message === 'Request failed with status code 400') {
+				message.current.show([
+					{
+						severity: 'error',
+						detail: 'Deze opdracht staat al in de database.',
+					},
+				])
+			} else {
+				message.current.show([
+					{
+						severity: 'error',
+						detail: 'Er is iets fout gegaan met een opdracht toevoegen, probeer nogmaals.',
+					},
+				])
+			}
 		}
 	}
 
@@ -170,6 +201,7 @@ export const AddNewOrder = () => {
 				<PageTitle title={'Voeg een nieuwe opdracht toe.'} />
 				<Messages ref={message} id={'message'} />
 				<AddNewOrderForm
+					isUpdate={false}
 					handleSubmitForm={handleSubmit}
 					users={users}
 					products={products}

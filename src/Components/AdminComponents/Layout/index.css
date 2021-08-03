@@ -76,3 +76,31 @@
 .pi {
     color: #222629;
 }
+
+.responsive-table thead tr,
+.responsive-table tbody tr {
+    width: 100%;
+}
+
+.responsive-table thead tr th,
+.responsive-table tbody tr td {
+    width: 100%;
+    padding: 10px 0 10px 0 !important;
+    background-color: #ffffff !important;
+    word-break: break-all;
+}
+
+.responsive-table tbody tr:not(.p-highlight):hover,
+.responsive-table tbody  > tr.p-highlight {
+    background-color: #ffffff !important;
+}
+
+.responsive-table thead tr th input {
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+}
+
+.responsive-table tbody tr td {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}

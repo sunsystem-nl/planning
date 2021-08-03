@@ -1,0 +1,14 @@
+@media print {
+	@page {
+        width: 150mm; /* plus .6 inches from padding */
+        height: 100mm; /* plus .125 inches from padding */
+        padding: 15mm;
+        margin: 15mm; /* the gutter */
+        float: left;
+        text-align: center;
+	}
+
+	#content {
+		font-size: 30rem;
+	}
+}

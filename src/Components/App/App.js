@@ -1,15 +1,17 @@
-import React                     from 'react'
+import React from 'react'
 import {
 	BrowserRouter as Router,
 	Route,
 	Switch,
-}                                from 'react-router-dom'
-import { AuthProvider }          from '../../Context/AuthContext'
-import { AdminDashboardPage }    from '../../Pages/AdminDashboard'
-import { ClientDashboardPage }   from '../../Pages/ClientDashboard'
-import LoginPage                 from '../../Pages/Login'
+} from 'react-router-dom'
+import { AuthProvider } from '../../Context/AuthContext'
+import { AdminDashboardPage } from '../../Pages/AdminDashboard'
+import { ClientDashboardPage } from '../../Pages/ClientDashboard'
+import LoginPage from '../../Pages/Login'
 import { WorkshopDashboardPage } from '../../Pages/WorkshopDashboard'
-import { PrivateRoute }          from '../PrivateRoute'
+import { PrivateRoute } from '../PrivateRoute'
+
+import './App.css'
 
 export const App = () => {
 	return (
@@ -18,19 +20,19 @@ export const App = () => {
 			<Router>
 				<Switch>
 					<Route
-						exact={ true } path={ '/' } component={ LoginPage }
+						exact={true} path={'/'} component={LoginPage}
 					/>
 					<PrivateRoute
-						path={ '/client-dashboard' }
-						component={ ClientDashboardPage }
+						path={'/client-dashboard'}
+						component={ClientDashboardPage}
 					/>
 					<PrivateRoute
-						path={ '/workshop-dashboard' }
-						component={ WorkshopDashboardPage }
+						path={'/workshop-dashboard'}
+						component={WorkshopDashboardPage}
 					/>
 					<PrivateRoute
-						path={ '/admin-dashboard' }
-						component={ AdminDashboardPage }
+						path={'/admin-dashboard'}
+						component={AdminDashboardPage}
 					/>
 				</Switch>
 			</Router>
