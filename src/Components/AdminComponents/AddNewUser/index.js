@@ -73,7 +73,7 @@ export const AddNewUser = () => {
 			'telefoonMobiel': telefoonMobiel || '',
 			'telefoonVast': telefoonVast || '',
 			'password': wachtwoord,
-			'wilemail': false || wilemail
+			'wilemail': wilemail === 'true' ? true : false
 		})
 
 		try {

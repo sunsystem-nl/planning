@@ -48,7 +48,7 @@ export const EditExistingUser = (data) => {
 			'telefoonMobiel': telefoonMobiel,
 			'telefoonVast': telefoonVast,
 			'password': wachtwoord,
-			'wilemail': wilemail
+			'wilemail': wilemail === 'true' ? true : false
 		})
 
 		const result = await axios.patch(`${process.env.REACT_APP_API_URL}/users/${state.uid}`, body, {

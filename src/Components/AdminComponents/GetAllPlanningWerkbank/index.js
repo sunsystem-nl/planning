@@ -690,7 +690,7 @@ export const GetAllPlanningWerkbank = () => {
 
 	return (
 		<div
-			className={'d-flex flex-column pt-5 pb-5'}
+			className={'d-flex flex-column pt-3 pb-5'}
 			style={{ minHeight: 'calc(100vh - 59px)', height: '100%' }}
 		>
 			<PageTitle title={`Werkbank planning voor ${selectedYear} week ${selectedWeek}.`} />
@@ -709,10 +709,12 @@ export const GetAllPlanningWerkbank = () => {
 				sortOrder={-1}
 				paginator
 				paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-				rows={10}
+				scrollable
+				scrollHeight='400px'
+				rows={orders.length || 10}
 				rowsPerPageOptions={[10, 20, 50, orders.length]}
 				emptyMessage='Geen Opdrachten gevonden.'
-				className={'mt-4 responsive-table'}
+				className={'mt-1 responsive-table'}
 				selection={selectedOrder}
 				onSelectionChange={e => setSelectedOrder(e.value)}
 				selectionMode='single'

@@ -104,3 +104,7 @@
     padding-left: 5px !important;
     padding-right: 5px !important;
 }
+
+.responsive-table .p-datatable-header {
+    padding: .25rem .025rem;
+}
